@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EtsyShield — Privacy Policy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f9fafb; line-height: 1.7; }
+    .container { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+    h1 { font-size: 28px; margin-bottom: 8px; color: #2E75B6; }
+    .updated { color: #6B7280; font-size: 14px; margin-bottom: 32px; }
+    h2 { font-size: 20px; margin-top: 32px; margin-bottom: 12px; color: #1a1a2e; }
+    p, li { font-size: 15px; color: #374151; margin-bottom: 12px; }
+    ul { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 6px; }
+    a { color: #2E75B6; }
+    .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #E5E7EB; font-size: 13px; color: #9CA3AF; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>EtsyShield — Privacy Policy</h1>
+    <p class="updated">Last updated: March 18, 2026</p>
+
+    <h2>1. Overview</h2>
+    <p>EtsyShield ("the Extension") is a Chrome browser extension that scans Etsy listing pages for trademark compliance issues and SEO optimization opportunities. We are committed to protecting your privacy and being transparent about our data practices.</p>
+
+    <h2>2. Data We Collect</h2>
+    <p><strong>We collect as little data as possible.</strong> Here's exactly what the Extension accesses:</p>
+    <ul>
+      <li><strong>Listing content (title, tags, description)</strong> — extracted from the Etsy listing page you are viewing, only when you initiate a scan. This data is processed locally on your device and is never sent to our servers (except when using optional AI features).</li>
+      <li><strong>Scan count</strong> — a simple numeric counter stored locally on your device via <code>chrome.storage.local</code> to enforce the free tier limit (5 scans/month). This never leaves your browser.</li>
+      <li><strong>Scan history</strong> — listing titles, URLs, and scores from your scans, stored locally on your device (up to 50 entries). You can clear this at any time. This data never leaves your browser.</li>
+      <li><strong>Subscription status</strong> — if you upgrade to Pro, your payment is processed by ExtensionPay (powered by Stripe). We receive only a confirmation that your license is active. We do not see or store your credit card details.</li>
+    </ul>
+
+    <h2>3. AI Features (Pro Only)</h2>
+    <p>When you use AI-powered features (Title Rewriter, Tag Generator, Description Improver, Appeal Letter Generator), the relevant listing data (title, tags, description, or appeal details you enter) is sent to our secure API endpoint hosted on Cloudflare Workers. This data is forwarded to the Anthropic Claude API for processing.</p>
+    <ul>
+      <li>We do not store the data you send to AI features.</li>
+      <li>Data is transmitted over HTTPS and processed in real time.</li>
+      <li>Anthropic's data retention policies apply to AI processing. See <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic's Privacy Policy</a>.</li>
+    </ul>
+    <p>If you do not use AI features, no listing data ever leaves your device.</p>
+
+    <h2>4. Data We Do NOT Collect</h2>
+    <ul>
+      <li>We do not collect your name, email address, or any personal information (unless you voluntarily provide it for support).</li>
+      <li>We do not track your browsing history or activity outside of Etsy listing pages.</li>
+      <li>We do not use cookies, analytics, or any third-party tracking scripts.</li>
+      <li>We do not sell, share, or monetize any user data.</li>
+      <li>We do not collect data from pages other than Etsy listing and shop pages.</li>
+    </ul>
+
+    <h2>5. Permissions Explained</h2>
+    <ul>
+      <li><strong>storage</strong> — to save your scan count, scan history, and subscription status locally on your device.</li>
+      <li><strong>activeTab</strong> — to read the content of the Etsy listing page you are currently viewing when you click the extension icon. This permission is scoped to the active tab only.</li>
+      <li><strong>alarms</strong> — to periodically check for Etsy policy updates (every 12 hours).</li>
+      <li><strong>host_permissions (etsy.com)</strong> — to inject the content script that extracts listing data from Etsy pages.</li>
+    </ul>
+
+    <h2>6. Data Storage & Security</h2>
+    <ul>
+      <li>All scan data is stored locally on your device using Chrome's built-in storage API.</li>
+      <li>You can delete all stored data at any time by clearing scan history within the extension or by uninstalling it.</li>
+      <li>AI API communications use HTTPS encryption.</li>
+      <li>API keys are stored server-side (Cloudflare Workers secrets) and are never exposed to the client.</li>
+    </ul>
+
+    <h2>7. Third-Party Services</h2>
+    <ul>
+      <li><strong>ExtensionPay / Stripe</strong> — payment processing for Pro subscriptions. See <a href="https://stripe.com/privacy" target="_blank">Stripe's Privacy Policy</a>.</li>
+      <li><strong>Cloudflare Workers</strong> — hosts the API proxy for AI features. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare's Privacy Policy</a>.</li>
+      <li><strong>Anthropic Claude API</strong> — processes AI requests. See <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic's Privacy Policy</a>.</li>
+    </ul>
+
+    <h2>8. Children's Privacy</h2>
+    <p>EtsyShield is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+    <h2>9. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last updated" date. Continued use of the Extension after changes constitutes acceptance of the updated policy.</p>
+
+    <h2>10. Contact</h2>
+    <p>If you have questions about this Privacy Policy, please contact us at:</p>
+    <p><a href="mailto:support@etsyshield.com">support@etsyshield.com</a></p>
+
+    <div class="footer">
+      <p>The term "Etsy" is a trademark of Etsy, Inc. EtsyShield is an independent tool and is not affiliated with, endorsed, or certified by Etsy, Inc.</p>
+    </div>
+  </div>
+</body>
+</html>

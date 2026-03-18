@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=400" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>EtsyShield</title>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo" id="header-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M14 2L4 7v7c0 6.075 4.25 11.425 10 12.75C19.75 25.425 24 20.075 24 14V7L14 2z"
+              fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M10 14l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">EtsyShield</div>
+      <div class="header-listing" id="listing-title">Scanning listing...</div>
+      <div class="header-time" id="scan-time"></div>
+    </div>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="content-scroll" id="content-scroll">
+
+    <!-- Loading -->
+    <div class="loading-state visible" id="loading-state">
+      <div class="spinner"></div>
+      <div class="loading-text">Analyzing listing...</div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" style="display:none;">
+      <div class="score-summary">
+        <div class="score-card">
+          <div class="score-card-label">Compliance</div>
+          <div class="score-circle-wrap">
+            <svg class="score-circle-svg" viewBox="0 0 80 80">
+              <circle class="score-circle-bg" cx="40" cy="40" r="34"/>
+              <circle class="score-circle-fg" id="compliance-circle" cx="40" cy="40" r="34"
+                      stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+            </svg>
+            <div class="score-value" id="compliance-score">0</div>
+          </div>
+          <span class="score-verdict" id="compliance-verdict"></span>
+        </div>
+        <div class="score-card">
+          <div class="score-card-label">SEO</div>
+          <div class="score-circle-wrap">
+            <svg class="score-circle-svg" viewBox="0 0 80 80">
+              <circle class="score-circle-bg" cx="40" cy="40" r="34"/>
+              <circle class="score-circle-fg" id="seo-circle" cx="40" cy="40" r="34"
+                      stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+            </svg>
+            <div class="score-value" id="seo-score">0</div>
+          </div>
+          <span class="score-verdict" id="seo-verdict"></span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-compliance">
+          Compliance <span class="tab-badge" id="badge-compliance">0</span>
+        </button>
+        <button class="tab-btn" id="tab-seo">
+          SEO <span class="tab-badge" id="badge-seo">0</span>
+        </button>
+      </div>
+
+      <div class="findings-container" id="findings-compliance"></div>
+      <div class="findings-container hidden" id="findings-seo"></div>
+    </div>
+
+    <!-- Not-on-Etsy -->
+    <div class="not-etsy-state" id="not-etsy-state">
+      <button class="back-to-results-btn" id="back-to-results-btn" style="display:none">&larr; Back to results</button>
+      <div class="state-message">
+        <strong>Scan a listing</strong>
+        Navigate to an Etsy listing page, or paste your listing below.
+      </div>
+      <div class="manual-paste">
+        <label for="manual-title-1">Title</label>
+        <textarea id="manual-title-1" placeholder="Paste your listing title..." rows="1"></textarea>
+        <label for="manual-tags-1">Tags (comma-separated)</label>
+        <textarea id="manual-tags-1" placeholder="tag1, tag2, tag3..." rows="1"></textarea>
+        <label for="manual-desc-1">Description</label>
+        <textarea id="manual-desc-1" placeholder="Paste your listing description..." rows="3"></textarea>
+        <button class="manual-scan-btn" id="manual-scan-btn-1">Scan Listing</button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-state" id="error-state">
+      <div class="state-message">
+        <strong>Something went wrong</strong>
+        <span id="error-message">Could not read the listing.</span>
+      </div>
+      <div class="manual-paste">
+        <label for="manual-title-2">Title</label>
+        <textarea id="manual-title-2" placeholder="Paste your listing title..." rows="1"></textarea>
+        <label for="manual-tags-2">Tags (comma-separated)</label>
+        <textarea id="manual-tags-2" placeholder="tag1, tag2, tag3..." rows="1"></textarea>
+        <label for="manual-desc-2">Description</label>
+        <textarea id="manual-desc-2" placeholder="Paste your listing description..." rows="3"></textarea>
+        <button class="manual-scan-btn" id="manual-scan-btn-2">Scan Listing</button>
+      </div>
+    </div>
+
+    <!-- Limit Overlay -->
+    <div class="limit-overlay" id="limit-overlay">
+      <div class="limit-card">
+        <div class="limit-card-title">Scan Limit Reached</div>
+        <div class="limit-card-desc">You've used all your free scans this month.</div>
+        <button class="upgrade-btn" id="limit-upgrade-btn">Upgrade to Pro</button>
+      </div>
+    </div>
+
+  </div><!-- end content-scroll -->
+
+  <!-- AI Tools + Scan Another — fixed above footer, always visible after scan -->
+  <div class="toolbar" id="toolbar" style="display:none;">
+    <button class="toolbar-btn outline" id="scan-another-btn">Scan another</button>
+    <button class="toolbar-btn ai" id="ai-rewrite-title-btn" style="display:none">Rewrite Title</button>
+    <button class="toolbar-btn ai" id="ai-generate-tags-btn" style="display:none">Generate Tags</button>
+    <button class="toolbar-btn ai" id="ai-improve-desc-btn" style="display:none">Improve Desc</button>
+  </div>
+
+  <!-- Footer — always at bottom -->
+  <div class="footer" id="footer" style="display:none;">
+    <div class="footer-left">
+      <span class="footer-scans"><strong id="scans-used">0</strong> / <span id="scans-limit">5</span> scans</span>
+      <span class="dev-badge" id="dev-badge" style="display:none;">DEV</span>
+    </div>
+    <div class="footer-right">
+      <button class="footer-more-btn" id="more-btn">More &#9662;</button>
+      <button class="copy-all-btn" id="copy-all-btn">Copy All</button>
+      <button class="upgrade-btn" id="footer-upgrade-btn">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Sub-views — OUTSIDE content-scroll, cover entire popup -->
+  <div class="sub-view" id="bulk-section">
+    <div class="sub-view-header">
+      <button class="back-btn" id="bulk-back-btn">&larr;</button>
+      <span class="sub-view-title">Bulk Shop Scan</span>
+      <span class="bulk-progress" id="bulk-progress"></span>
+    </div>
+    <div class="sub-view-body">
+      <div class="bulk-status" id="bulk-status">Scanning listings...</div>
+      <div class="bulk-list" id="bulk-list"></div>
+    </div>
+  </div>
+
+  <div class="sub-view" id="history-section">
+    <div class="sub-view-header">
+      <button class="back-btn" id="history-back-btn">&larr;</button>
+      <span class="sub-view-title">Scan History</span>
+      <button class="history-clear-btn" id="history-clear-btn">Clear</button>
+    </div>
+    <div class="sub-view-body">
+      <div class="history-list" id="history-list"></div>
+      <div class="history-empty" id="history-empty">
+        <div class="empty-state-title">No scans yet</div>
+        <div class="empty-state-desc">Scan history will appear here.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-view" id="appeal-section">
+    <div class="sub-view-header">
+      <button class="back-btn" id="appeal-back-btn">&larr;</button>
+      <span class="sub-view-title">Appeal Letter</span>
+    </div>
+    <div class="sub-view-body">
+      <div class="appeal-desc">If Etsy deactivated your listing, generate a professional appeal letter.</div>
+      <div class="ai-usage-bar" id="ai-usage-bar"><span id="ai-usage-text"></span></div>
+      <div class="appeal-form">
+        <label for="appeal-listing-title">Listing Title</label>
+        <textarea id="appeal-listing-title" placeholder="Enter the deactivated listing title..." rows="2"></textarea>
+        <label for="appeal-reason">Etsy's Reason (required)</label>
+        <textarea id="appeal-reason" placeholder="Paste the reason from Etsy's notification..." rows="3"></textarea>
+        <label for="appeal-explanation">Your Explanation (optional)</label>
+        <textarea id="appeal-explanation" placeholder="Describe your product..." rows="3"></textarea>
+        <div class="appeal-buttons">
+          <button class="appeal-generate-btn" id="appeal-generate-btn">Generate with AI</button>
+          <button class="appeal-template-btn" id="appeal-template-btn">Use Template</button>
+        </div>
+      </div>
+      <div class="appeal-result" id="appeal-result" style="display:none;">
+        <div class="appeal-result-label">Your Appeal Letter</div>
+        <textarea class="appeal-output" id="appeal-output" rows="10" readonly></textarea>
+        <button class="copy-btn" id="appeal-copy-btn" style="width:100%">Copy Letter</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-view" id="ai-results-section">
+    <div class="sub-view-header">
+      <button class="back-btn" id="ai-results-back-btn">&larr;</button>
+      <span class="sub-view-title" id="ai-results-title">AI Suggestion</span>
+    </div>
+    <div class="sub-view-body">
+      <div class="ai-results-content" id="ai-results-content"></div>
+      <div style="padding:8px 16px;">
+        <button class="copy-btn" id="ai-results-copy-btn" style="width:100%">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-view" id="policy-section">
+    <div class="sub-view-header">
+      <button class="back-btn" id="policy-back-btn">&larr;</button>
+      <span class="sub-view-title">Policy Updates</span>
+    </div>
+    <div class="sub-view-body">
+      <div class="policy-list" id="policy-list"></div>
+      <div class="history-empty" id="policy-empty">
+        <div class="empty-state-title">No updates</div>
+        <div class="empty-state-desc">You're up to date.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Sheet -->
+  <div class="action-sheet-overlay" id="action-sheet-overlay">
+    <div class="action-sheet">
+      <div class="action-sheet-handle"></div>
+      <button class="action-sheet-item" id="sheet-history">Scan History</button>
+      <button class="action-sheet-item" id="sheet-appeal">Appeal Letter</button>
+      <button class="action-sheet-item" id="sheet-bulk" style="display:none">Bulk Scan Shop</button>
+      <button class="action-sheet-item" id="sheet-alerts">Policy Alerts <span class="policy-badge" id="policy-badge" style="display:none">0</span></button>
+      <button class="action-sheet-item" id="sheet-manage-sub" style="display:none">Manage Subscription</button>
+    </div>
+  </div>
+
+  <script type="module" src="./popup.ts"></script>
+</body>
+</html>
