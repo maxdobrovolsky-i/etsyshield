@@ -82,7 +82,7 @@ function extractTags(): string[] {
           const tags = typeof ld.keywords === 'string'
             ? ld.keywords.split(',').map((t: string) => t.trim())
             : Array.isArray(ld.keywords) ? ld.keywords : [];
-          if (tags.length > 0) return tags;
+          if (tags.length > 0) return tags.slice(0, 13);
         }
       }
     } catch { /* ignore parse errors */ }
@@ -94,7 +94,7 @@ function extractTags(): string[] {
         const tagsStr = `[${tagsMatch[1]}]`;
         const tags = JSON.parse(tagsStr) as string[];
         if (tags.length > 0 && tags.every(t => typeof t === 'string')) {
-          return tags;
+          return tags.slice(0, 13);
         }
       }
     } catch { /* ignore */ }
@@ -117,8 +117,8 @@ function extractTags(): string[] {
       potentialTags.push(text);
     }
   }
-  if (potentialTags.length >= 3 && potentialTags.length <= 15) {
-    return potentialTags;
+  if (potentialTags.length >= 3) {
+    return potentialTags.slice(0, 13);
   }
 
   return [];

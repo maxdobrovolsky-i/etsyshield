@@ -9,8 +9,31 @@ export function renderSEOTab(
   container: HTMLElement,
   result: ScanResult,
   onAiFix?: (type: AiFixType) => void,
+  tags?: string[],
 ): void {
   container.innerHTML = '';
+
+  // Show detected tags at the top
+  if (tags && tags.length > 0) {
+    const tagsBlock = document.createElement('div');
+    tagsBlock.className = 'tags-block';
+
+    const tagsLabel = document.createElement('div');
+    tagsLabel.className = 'tags-block-label';
+    tagsLabel.textContent = `Detected Tags (${tags.length}/13)`;
+    tagsBlock.appendChild(tagsLabel);
+
+    const tagsWrap = document.createElement('div');
+    tagsWrap.className = 'tags-block-list';
+    for (const tag of tags) {
+      const chip = document.createElement('span');
+      chip.className = 'tag-chip';
+      chip.textContent = tag;
+      tagsWrap.appendChild(chip);
+    }
+    tagsBlock.appendChild(tagsWrap);
+    container.appendChild(tagsBlock);
+  }
 
   if (result.findings.length === 0) {
     const empty = document.createElement('div');

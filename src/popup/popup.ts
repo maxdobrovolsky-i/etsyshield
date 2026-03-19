@@ -165,13 +165,16 @@ async function sendMessage<T = unknown>(
 // Store results for copy function
 let lastComplianceResult: ScanResult | null = null;
 let lastSEOResult: ScanResult | null = null;
+let lastTags: string[] = [];
 
 async function renderResults(
   complianceResult: ScanResult,
   seoResult: ScanResult,
+  tags?: string[],
 ): Promise<void> {
   lastComplianceResult = complianceResult;
   lastSEOResult = seoResult;
+  lastTags = tags ?? [];
 
   // Animate score circles
   animateScore($complianceCircle, $complianceScore, complianceResult.score);
@@ -181,7 +184,7 @@ async function renderResults(
   renderComplianceTab($findingsCompliance, complianceResult);
   renderSEOTab($findingsSEO, seoResult, (aiFixType) => {
     if (aiFixType) runAiTool(aiFixType, `ai-${aiFixType.replace('-', '-')}-btn`);
-  });
+  }, lastTags);
 
   // Badge counts
   const complianceBadge = getComplianceBadge(complianceResult);
@@ -291,7 +294,7 @@ async function handleManualScan(
     const seoResult = scanSEO(listing);
 
     $listingTitle.textContent = listing.title || 'Manual scan';
-    await renderResults(complianceResult, seoResult);
+    await renderResults(complianceResult, seoResult, listing.tags);
     await saveScanToHistory('', listing.title || 'Manual scan', complianceResult, seoResult);
     await updateScanCount();
   } catch (err) {
@@ -1390,7 +1393,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const seoResult = scanSEO(listing);
 
       // Render results
-      await renderResults(complianceResult, seoResult);
+      await renderResults(complianceResult, seoResult, listing.tags);
       await saveScanToHistory(tabUrl, listing.title, complianceResult, seoResult);
       await updateScanCount();
     });

@@ -378,6 +378,42 @@ body {
   display: block;
 }
 
+/* ---------- Tags Block ---------- */
+
+.tags-block {
+  margin: 8px 14px 4px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.tags-block-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.tags-block-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #334155;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
 .ai-fix-btn {
   margin-top: 8px;
   padding: 5px 12px;
