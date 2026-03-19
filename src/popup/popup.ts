@@ -1140,9 +1140,10 @@ async function launchBulkScan(): Promise<void> {
   let totalSeo = 0;
   let issueCount = 0;
 
-  for (const listing of listings) {
-    progressEl.textContent = `${scanned + 1}/${listings.length}`;
+  const CONCURRENCY = 3;
 
+  /** Process a single listing: fetch, parse, scan, render */
+  async function processSingleListing(listing: { url: string; title: string }): Promise<void> {
     try {
       const htmlResp = await fetch(listing.url);
       const html = await htmlResp.text();
@@ -1170,7 +1171,6 @@ async function launchBulkScan(): Promise<void> {
                      seoResult.findings.filter(f => f.severity !== 'green').length;
       issueCount += issues;
 
-      // Render item
       const item = document.createElement('div');
       item.className = 'bulk-item';
 
@@ -1208,7 +1208,6 @@ async function launchBulkScan(): Promise<void> {
 
       listEl.appendChild(item);
     } catch {
-      // Fetch failed — possibly captcha or network error
       const item = document.createElement('div');
       item.className = 'bulk-item';
       const failTitle = document.createElement('div');
@@ -1220,9 +1219,17 @@ async function launchBulkScan(): Promise<void> {
     }
 
     scanned++;
+    progressEl.textContent = `${scanned}/${listings.length}`;
+  }
 
-    // Throttle requests to avoid captcha (200ms delay between fetches)
-    await new Promise(r => setTimeout(r, 200));
+  // Process listings in parallel batches of CONCURRENCY
+  for (let i = 0; i < listings.length; i += CONCURRENCY) {
+    const batch = listings.slice(i, i + CONCURRENCY);
+    await Promise.all(batch.map(l => processSingleListing(l)));
+    // Small delay between batches to avoid Etsy rate limiting
+    if (i + CONCURRENCY < listings.length) {
+      await new Promise(r => setTimeout(r, 300));
+    }
   }
 
   const avgC = scanned > 0 ? Math.round(totalCompliance / scanned) : 0;

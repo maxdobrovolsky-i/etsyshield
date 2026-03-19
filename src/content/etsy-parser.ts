@@ -249,8 +249,8 @@ function extractShopListings(): Array<{ url: string; title: string }> {
 
     results.push({ url, title });
 
-    // Limit to 50 listings
-    if (results.length >= 50) break;
+    // Limit to 100 listings
+    if (results.length >= 100) break;
   }
 
   return results;
