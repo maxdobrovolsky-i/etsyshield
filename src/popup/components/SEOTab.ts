@@ -13,25 +13,41 @@ export function renderSEOTab(
 ): void {
   container.innerHTML = '';
 
-  // Show detected tags at the top
-  if (tags && tags.length > 0) {
+  // Show detected tags — collapsed by default
+  const cappedTags = tags ? tags.slice(0, 13) : [];
+  if (cappedTags.length > 0) {
     const tagsBlock = document.createElement('div');
     tagsBlock.className = 'tags-block';
 
-    const tagsLabel = document.createElement('div');
+    const tagsHeader = document.createElement('div');
+    tagsHeader.className = 'tags-block-header';
+
+    const tagsLabel = document.createElement('span');
     tagsLabel.className = 'tags-block-label';
-    tagsLabel.textContent = `Detected Tags (${tags.length}/13)`;
-    tagsBlock.appendChild(tagsLabel);
+    tagsLabel.textContent = `Detected Tags (${cappedTags.length}/13)`;
+
+    const chevron = document.createElement('span');
+    chevron.className = 'tags-block-chevron';
+    chevron.textContent = '\u25BC';
+
+    tagsHeader.appendChild(tagsLabel);
+    tagsHeader.appendChild(chevron);
+    tagsBlock.appendChild(tagsHeader);
 
     const tagsWrap = document.createElement('div');
     tagsWrap.className = 'tags-block-list';
-    for (const tag of tags) {
+    for (const tag of cappedTags) {
       const chip = document.createElement('span');
       chip.className = 'tag-chip';
       chip.textContent = tag;
       tagsWrap.appendChild(chip);
     }
     tagsBlock.appendChild(tagsWrap);
+
+    tagsHeader.addEventListener('click', () => {
+      tagsBlock.classList.toggle('expanded');
+    });
+
     container.appendChild(tagsBlock);
   }
 

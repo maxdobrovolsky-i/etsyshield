@@ -382,10 +382,18 @@ body {
 
 .tags-block {
   margin: 8px 14px 4px;
-  padding: 10px 12px;
+  padding: 8px 12px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
+}
+
+.tags-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
 }
 
 .tags-block-label {
@@ -394,13 +402,31 @@ body {
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  margin-bottom: 6px;
+}
+
+.tags-block-chevron {
+  font-size: 8px;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.tags-block.expanded .tags-block-chevron {
+  transform: rotate(180deg);
 }
 
 .tags-block-list {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease, margin-top 0.25s ease;
+  margin-top: 0;
+}
+
+.tags-block.expanded .tags-block-list {
+  max-height: 200px;
+  margin-top: 8px;
 }
 
 .tag-chip {
