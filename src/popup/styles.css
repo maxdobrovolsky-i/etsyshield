@@ -898,6 +898,160 @@ body {
   border-radius: 8px;
 }
 
+/* ---------- Upgrade Sub-View ---------- */
+
+.upgrade-hero {
+  text-align: center;
+  padding: 20px 16px 16px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+}
+
+.upgrade-price {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.upgrade-period {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.upgrade-tagline {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.upgrade-features {
+  padding: 14px 16px 0;
+}
+
+.upgrade-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.upgrade-feature {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.upgrade-feature-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  color: #7c3aed;
+}
+
+.upgrade-feature-icon.ai-icon {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.upgrade-feature-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.upgrade-feature-desc {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+.upgrade-cta-wrap {
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.upgrade-cta-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.upgrade-cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+.upgrade-cta-btn:active {
+  transform: translateY(0);
+}
+
+.upgrade-guarantee {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 8px;
+}
+
+.upgrade-comparison {
+  padding: 0 16px 20px;
+}
+
+.upgrade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.upgrade-table th {
+  font-weight: 700;
+  color: #64748b;
+  text-align: center;
+  padding: 6px 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.upgrade-table th:first-child {
+  text-align: left;
+}
+
+.upgrade-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  text-align: center;
+}
+
+.upgrade-table td:first-child {
+  text-align: left;
+  color: #334155;
+}
+
+.upgrade-table .pro-col {
+  color: #7c3aed;
+  font-weight: 600;
+}
+
 /* ---------- History ---------- */
 
 .history-list {

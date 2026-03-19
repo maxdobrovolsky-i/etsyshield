@@ -744,7 +744,7 @@ document.getElementById('appeal-generate-btn')?.addEventListener('click', async 
   // AI is Pro/Dev only
   const aiLimit = await getAiDailyLimit();
   if (aiLimit <= AI_DAILY_FREE) {
-    alert('AI generation is a Pro feature. Use "Use Template" for free, or upgrade to Pro for AI-powered letters.');
+    handleUpgrade();
     return;
   }
 
@@ -910,7 +910,7 @@ async function runAiTool(toolName: string, btnId: string): Promise<void> {
   // Check Pro/Dev
   const limit = await getAiDailyLimit();
   if (limit <= AI_DAILY_FREE) {
-    alert('AI Tools are a Pro feature. Upgrade to unlock.');
+    handleUpgrade();
     return;
   }
   const usage = await getAiUsage();
@@ -1050,12 +1050,25 @@ document.getElementById('ai-results-copy-btn')?.addEventListener('click', async 
 /*  Upgrade button handlers                           */
 /* -------------------------------------------------- */
 
+const $upgradeSection = document.getElementById('upgrade-section')!;
+
 function handleUpgrade(): void {
-  sendMessage('openPayment');
+  // Close limit overlay if visible
+  $limitOverlay.classList.remove('visible');
+  // Show upgrade sub-view
+  $upgradeSection.classList.add('active');
 }
 
 document.getElementById('footer-upgrade-btn')?.addEventListener('click', handleUpgrade);
 document.getElementById('limit-upgrade-btn')?.addEventListener('click', handleUpgrade);
+
+document.getElementById('upgrade-back-btn')?.addEventListener('click', () => {
+  $upgradeSection.classList.remove('active');
+});
+
+document.getElementById('upgrade-cta-btn')?.addEventListener('click', () => {
+  sendMessage('openPayment');
+});
 
 /* -------------------------------------------------- */
 /*  Bulk Shop Scan                                    */
@@ -1095,7 +1108,7 @@ async function launchBulkScan(): Promise<void> {
   const isPro = (proResp.success && proResp.data?.paid) || !!syncData.proLicense;
 
   if (!isPro) {
-    alert('Bulk Scan is a Pro feature. Upgrade to scan all listings at once.');
+    handleUpgrade();
     return;
   }
 
