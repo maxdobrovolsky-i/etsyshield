@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "EtsyShield — Compliance + SEO Scanner",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Protect your Etsy shop from suspension and optimize listings for search. Trademark checking + SEO analysis in one click.",
   "permissions": ["storage", "activeTab", "alarms"],
   "host_permissions": ["https://www.etsy.com/*", "https://*.etsy.com/*", "https://etsyshield-api.max-dobrikf.workers.dev/*"],

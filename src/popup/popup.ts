@@ -1269,14 +1269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   showLoading();
 
-  // 1. Check scan limit
-  const limitResp = await sendMessage<{ allowed: boolean }>('checkLimit');
-  if (limitResp.success && limitResp.data && !limitResp.data.allowed) {
-    showLimitReached();
-    return;
-  }
-
-  // 2. Get the active tab
+  // 1. Get the active tab
   let activeTab: chrome.tabs.Tab | undefined;
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -1312,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         border:none;border-radius:8px;cursor:pointer;">
         Scan All Listings
       </button>
-      <div style="font-size:10px;color:#64748b;margin-top:8px;">Pro feature — scans up to 50 listings</div>
+      <div style="font-size:10px;color:#64748b;margin-top:8px;">Pro feature — scans up to 100 listings</div>
     `;
     document.getElementById('content-scroll')?.appendChild(shopView);
 
@@ -1333,14 +1326,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // 5. Extract listing data from the content script
-  try {
-    if (!activeTab?.id) {
-      showError('Could not identify the current tab.');
-      return;
-    }
+  // 5. Extract listing title (without scanning) to show preview
+  if (!activeTab?.id) {
+    showError('Could not identify the current tab.');
+    return;
+  }
 
-    const response = await chrome.tabs.sendMessage(activeTab.id, {
+  const tabId = activeTab.id;
+
+  try {
+    const response = await chrome.tabs.sendMessage(tabId, {
       action: 'extractListing',
     }) as { success: boolean; data?: ListingData; error?: string };
 
@@ -1350,20 +1345,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const listing = response.data;
+
+    // Show listing preview with scan button (no auto-scan)
+    hideAll();
+    $loading.classList.remove('visible');
     $listingTitle.textContent = listing.title || 'Untitled listing';
-
-    // 5. Increment scan count
-    await sendMessage('incrementScan');
-
-    // 6. Run scanners
-    const complianceResult = scanCompliance(listing);
-    const seoResult = scanSEO(listing);
-
-    // 7. Render results
-    await renderResults(complianceResult, seoResult);
-    // Save to history
-    await saveScanToHistory(tabUrl, listing.title, complianceResult, seoResult);
+    $footer.style.display = '';
     await updateScanCount();
+
+    const previewEl = document.createElement('div');
+    previewEl.id = 'scan-preview';
+    previewEl.style.cssText = 'padding:40px 20px;text-align:center;';
+    previewEl.innerHTML = `
+      <div style="font-size:36px;margin-bottom:12px;">&#128737;&#65039;</div>
+      <div style="font-size:16px;font-weight:700;color:#0f172a;margin-bottom:6px;">Etsy Listing Detected</div>
+      <div style="font-size:12px;color:#64748b;margin-bottom:6px;line-height:1.5;padding:0 12px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${listing.title || 'Untitled listing'}</div>
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:20px;">${listing.tags.length} tags &middot; ${listing.description.split(/\s+/).filter(Boolean).length} words in description</div>
+      <button id="scan-now-btn" style="
+        width:100%;padding:12px;font-size:14px;font-weight:600;
+        color:#fff;background:linear-gradient(135deg,#1e40af,#3b82f6);
+        border:none;border-radius:8px;cursor:pointer;">
+        Scan This Listing
+      </button>
+    `;
+    document.getElementById('content-scroll')?.appendChild(previewEl);
+
+    document.getElementById('scan-now-btn')?.addEventListener('click', async () => {
+      // Check scan limit before scanning
+      const limitCheck = await sendMessage<{ allowed: boolean }>('checkLimit');
+      if (limitCheck.success && limitCheck.data && !limitCheck.data.allowed) {
+        previewEl.remove();
+        showLimitReached();
+        return;
+      }
+
+      previewEl.remove();
+      showLoading();
+
+      // Increment scan count
+      await sendMessage('incrementScan');
+
+      // Run scanners
+      const complianceResult = scanCompliance(listing);
+      const seoResult = scanSEO(listing);
+
+      // Render results
+      await renderResults(complianceResult, seoResult);
+      await saveScanToHistory(tabUrl, listing.title, complianceResult, seoResult);
+      await updateScanCount();
+    });
   } catch (err) {
     showError('Could not read the listing. You can paste your details manually below.');
   }

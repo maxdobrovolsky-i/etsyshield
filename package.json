@@ -1,6 +1,6 @@
 {
   "name": "etsyshield",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Etsy listing compliance & SEO scanner Chrome extension",
   "type": "module",
   "scripts": {
